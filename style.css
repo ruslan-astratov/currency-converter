@@ -1,0 +1,115 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+
+  font-family: "Roboto", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+li {
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------- */
+
+/* Див header */
+.header {
+  background: #f5f5f6;
+  padding-top: 11px;
+  padding-bottom: 6px;
+}
+
+/* В шапке  - контейнер для логотипа,    навигации и  кнопки "Выход" */
+.header__container {
+  width: 950px;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: flex;
+
+  justify-content: space-between;
+}
+
+/* Навигация  (внутри этого блока находятся ссылки */
+.header__nav {
+  display: flex;
+  padding-top: 9px;
+  position: relative;
+  right: 32px;
+  width: 611px;
+}
+
+.header__nav-link {
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 13px;
+  letter-spacing: 0.06em;
+  color: #959ba4;
+  margin-right: 25px;
+}
+
+/* Первая ссылка при заходе на страницу отмечена как активная */
+.header__nav-link_active {
+  color: black;
+}
+
+/* Кнопка "Войти" */
+.header__button {
+
+  cursor: pointer;
+  background: #ffffff;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+
+  padding: 10px ;
+
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 13px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.06em;
+
+  position: relative;
+  bottom: 2px;
+}
+
+/*  ------------------------------------------------------------------- */
+
+/* Центрирующий контейнер для самого конвертера валют */
+.converter {
+  width: 646px;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding-top: 57px;
+}
+
+/* Заголовок   "Конвертер валют онлайн"  */
+.converter__heading {
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 42px;
+  
+}
+
+
+
