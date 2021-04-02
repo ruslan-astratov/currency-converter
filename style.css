@@ -122,7 +122,8 @@ li {
 }
 
 /* Заголовок в левой колонке */
-.form__left-column-heading {
+.form__left-column-heading,
+.form__right-column-heading {
   font-size: 12px;
   line-height: 14px;
   font-weight: normal;
