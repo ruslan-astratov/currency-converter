@@ -221,10 +221,8 @@ select:hover {
 select:focus {
   color: white;
 
-  background-color: #833ae0  !important;
+  background-color: #833ae0 !important;
 }
-
-
 
 /*  */
 
@@ -271,7 +269,7 @@ select:focus {
   color: #c6c6c6;
 }
 
-/* Стрелки , отвечающие за смену БАЗОВОЙ и ЖЕЛАЕМОЙ валют */
+/*  -------------------------------------------- Стрелки , отвечающие за смену БАЗОВОЙ и ЖЕЛАЕМОЙ валют */
 .arrows {
   position: absolute;
   left: 301px;
@@ -282,4 +280,36 @@ select:focus {
 
 .arrows:hover path {
   stroke: #833ae0;
+}
+/*  ------------------------------------------- //  Стрелки , отвечающие за смену БАЗОВОЙ и ЖЕЛАЕМОЙ валют */
+
+/* ------------------------------------------------- СТИЛИ для МОДАЛЬНОГО  ОКНА ------------------------------------------------------------ */
+
+/* Чёрный фон с ярлыком Loading в центре  */
+.modal {
+
+  position: absolute;
+  background: rgba(0, 0, 0, 0.44);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ярлык с текстом Loading */
+.modal__label {
+  background: #ffffff;
+  border-radius: 3px;
+  font-size: 24px;
+  line-height: 28px;
+  width: 129px;
+  height: 54px;
+  padding: 14px 21px 13px 23px;
+  position: relative;
+  bottom: 51px;
+  right: 3px;
 }

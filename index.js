@@ -26,6 +26,9 @@
   // Получим форму 
   let form = document.querySelector("#form")
 
+  // Получим модальное окно
+  let modal = document.querySelector("#modal")
+
 
 
 
@@ -35,11 +38,42 @@
   // Функция, которая проверяет leftActiveButton и rightActiveButton и, если они НЕ равны друг другу - делает фетч-запрос
   function sendFetch() {
 
+    // Переменная, в которой будет лежать логическое значение.  Флаг для того, чтобы показывать или скрывать МОДАЛЬНОЕ ОКНО 
+    let isVisibleModal
+
+
+
+
     if(state.leftActiveButton != state.rightActiveButton) {
+
+      isVisibleModal = true
+
+
+
+      // Запускаем таймер setTimeout на 500 миллисекунд.  Если по прошествии 500м.с. у нас  НЕ   будет данных с сервера , тогда покажем МОДАЛЬНОЕ ОКНО
+      setTimeout(function() {
+
+        if(isVisibleModal) {
+
+          modal.style.display = "flex"
+
+        }
+
+      }, 500)
+      
+
+
 
       return fetch(`https://api.ratesapi.io/api/latest?base=${state.leftActiveButton}&symbols=${state.rightActiveButton}`)
         .then( response =>  response.json())
         .then( data => {
+
+          // СКРЫВАЕМ МОДАЛЬНОЕ ОКНО 
+          isVisibleModal = false
+
+          modal.style.display = "none"
+          // СКРЫВАЕМ МОДАЛЬНОЕ ОКНО 
+
 
           state.rate = data.rates[state.rightActiveButton]
 
@@ -1073,6 +1107,10 @@
 
   // Вешаю обработчик по клику на переключатель
   arrow.addEventListener("click", currenciesReverse)
+
+
+
+
 
 
 
