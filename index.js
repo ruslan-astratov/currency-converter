@@ -1,6 +1,6 @@
-// Скрипты должны запускаться только при полной загрузке DOM-а
+// -------------------------------------------------------------------- ДЕЛАЮ  ПОКАЗ ОШИБКИ ПРИ ОТСУТСТВИИ ИНТЕРНЕТА 
+// swal("Нет устойчивого интернет-соединения", "Что-то мне поплохело.. х_х", "error");
 
-// document.addEventListener('DOMContentLoaded', () => {
 
   // Наш объект состояния приложения
   let state = {
@@ -1077,151 +1077,116 @@
 
 
 
-  // ----------------------------------------- ФУНКЦИЯ   СРАБАТЫВАЮЩАЯ    ПРИ КЛИКЕ    НА СТРЕЛКИ-ПЕРЕКЛЮЧАТЕЛИ  -------------------------------------------
+  // --------------------------------------------- ФУНКЦИЯ   СРАБАТЫВАЮЩАЯ    ПРИ КЛИКЕ    НА СТРЕЛКИ-ПЕРЕКЛЮЧАТЕЛИ  -------------------------------------------
+
   function currenciesReverse() {
 
-    // Мы УДАЛЯЕМ  активный КЛАСС  в ЛЕВОЙ   и ПРАВОЙ   половинах формы,    У  КНОПОК и СЕЛЕКТОВ
 
-    // ------------------------------------------ Находим КНОПКИ и СЕЛЕКТ в ЛЕВОЙ половине  и удаляем активный класс
-    let buttonsOnLeftSide = form.querySelector("#currencies-row-left").querySelectorAll(".currencies-row-button")
+    console.log("Есть ли интернет-соединение?", navigator.onLine)
 
-    // Перебираем кнопки. Находим и удаляем АКТИВНЫЙ класс, если он есть
-    buttonsOnLeftSide.forEach( button => {
 
-      if(button.classList.contains("current-currencie")) {
+    // Если интернет-соединение есть, то мы будем выполнять тело функции
 
-        button.classList.remove("current-currencie")
+    if(navigator.onLine) {
+
+
+      // Мы УДАЛЯЕМ  активный КЛАСС  в ЛЕВОЙ   и ПРАВОЙ   половинах формы,    У  КНОПОК и СЕЛЕКТОВ
+
+      // ------------------------------------------ Находим КНОПКИ и СЕЛЕКТ в ЛЕВОЙ половине  и удаляем активный класс
+      let buttonsOnLeftSide = form.querySelector("#currencies-row-left").querySelectorAll(".currencies-row-button")
+
+      // Перебираем кнопки. Находим и удаляем АКТИВНЫЙ класс, если он есть
+      buttonsOnLeftSide.forEach( button => {
+
+        if(button.classList.contains("current-currencie")) {
+
+          button.classList.remove("current-currencie")
+
+        }
+
+      } )
+
+      // Селект так же смотрим 
+      let selectOnLeftSide = form.querySelector("#left-select")
+
+      if(selectOnLeftSide.classList.contains("current-currencie")) {
+        selectOnLeftSide.classList.remove("current-currencie")
+
+        selectOnLeftSide.style.backgroundColor = "white"
 
       }
-
-    } )
-
-    // Селект так же смотрим 
-    let selectOnLeftSide = form.querySelector("#left-select")
-
-    if(selectOnLeftSide.classList.contains("current-currencie")) {
-      selectOnLeftSide.classList.remove("current-currencie")
-
-      selectOnLeftSide.style.backgroundColor = "white"
-
-    }
-    // ------------------------------------------ // Находим КНОПКИ и СЕЛЕКТ в ЛЕВОЙ половине  и удаляем активный класс
+      // ------------------------------------------ // Находим КНОПКИ и СЕЛЕКТ в ЛЕВОЙ половине  и удаляем активный класс
 
 
 
-    // ------------------------------------------ Находим КНОПКИ и СЕЛЕКТ в ПРАВОЙ половине  и удаляем активный класс
-    let buttonsOnRightSide = form.querySelector("#currencies-row-right").querySelectorAll(".currencies-row-button")
+      // ------------------------------------------ Находим КНОПКИ и СЕЛЕКТ в ПРАВОЙ половине  и удаляем активный класс
+      let buttonsOnRightSide = form.querySelector("#currencies-row-right").querySelectorAll(".currencies-row-button")
 
-    // Перебираем кнопки. Находим и удаляем АКТИВНЫЙ класс, если он есть
-    buttonsOnRightSide.forEach( button => {
+      // Перебираем кнопки. Находим и удаляем АКТИВНЫЙ класс, если он есть
+      buttonsOnRightSide.forEach( button => {
 
-      if(button.classList.contains("current-currencie")) {
+        if(button.classList.contains("current-currencie")) {
 
-        button.classList.remove("current-currencie")
+          button.classList.remove("current-currencie")
+        
+        }
+
+      } )
+
+      // Селект так же смотрим 
+      let selectOnRightSide = form.querySelector("#right-select")
+
+      if(selectOnRightSide.classList.contains("current-currencie")) {
+
+        selectOnRightSide.classList.remove("current-currencie")
+
+        selectOnRightSide.style.backgroundColor = "white"
+
+      }
+      // ------------------------------------------ // Находим КНОПКИ и СЕЛЕКТ в ПРАВОЙ половине  и удаляем активный класс
+
+
+
+
       
-      }
-
-    } )
-
-    // Селект так же смотрим 
-    let selectOnRightSide = form.querySelector("#right-select")
-
-    if(selectOnRightSide.classList.contains("current-currencie")) {
-
-      selectOnRightSide.classList.remove("current-currencie")
-
-      selectOnRightSide.style.backgroundColor = "white"
-
-    }
-    // ------------------------------------------ // Находим КНОПКИ и СЕЛЕКТ в ПРАВОЙ половине  и удаляем активный класс
 
 
 
 
+      //-----------------------------------------     Теперь ЗАДАЁМ   эти классы  на кнопки   (селекты)   РЕВЕРСИВНО  
+
+
+      // В ЛЕВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  rightActiveButton
+
+      // Переменная-флаг.  "Есть ли среди ЛЕВЫХ кнопок та, которая равна  rightActiveButton?"
+      let isFindActiveButtonInLeftSide = false
+
+
+      buttonsOnLeftSide.forEach( button => {
+
+        if(button.innerHTML == state.rightActiveButton) {
+          button.classList.add("current-currencie")
+
+          // Да, мы нашли в левой части кнопку, которая соответствовала бы правой кнопке
+          isFindActiveButtonInLeftSide = true 
+        }
+
+      })
+
+
+      // Если мы НЕ нашли нужную кнопку, значит, нужно работать с СЕЛЕКТОМ
+      if(!isFindActiveButtonInLeftSide) {
+
+        if(selectOnLeftSide.value = state.rightActiveButton) {
+
+          selectOnLeftSide.classList.add("current-currencie")
+
+          selectOnLeftSide.style.backgroundColor = "#833ae0"
     
-
-
-
-
-    //-----------------------------------------     Теперь ЗАДАЁМ   эти классы  на кнопки   (селекты)   РЕВЕРСИВНО  
-
-
-    // В ЛЕВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  rightActiveButton
-
-    // Переменная-флаг.  "Есть ли среди ЛЕВЫХ кнопок та, которая равна  rightActiveButton?"
-    let isFindActiveButtonInLeftSide = false
-
-
-    buttonsOnLeftSide.forEach( button => {
-
-      if(button.innerHTML == state.rightActiveButton) {
-        button.classList.add("current-currencie")
-
-        // Да, мы нашли в левой части кнопку, которая соответствовала бы правой кнопке
-        isFindActiveButtonInLeftSide = true 
-      }
-
-    })
-
-
-    // Если мы НЕ нашли нужную кнопку, значит, нужно работать с СЕЛЕКТОМ
-    if(!isFindActiveButtonInLeftSide) {
-
-      if(selectOnLeftSide.value = state.rightActiveButton) {
-
-        selectOnLeftSide.classList.add("current-currencie")
-
-        selectOnLeftSide.style.backgroundColor = "#833ae0"
-  
-      }
-
-    }
-    // В ЛЕВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  rightActiveButton
-
-
-
-
-
-
-
-
-
-
-
-    // В ПРАВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  leftActiveButton
-
-    // Переменная-флаг.  "Есть ли среди ЛЕВЫХ кнопок та, которая равна  leftActiveButton?"
-    let isFindActiveButtonInRightSide = false
-
-    buttonsOnRightSide.forEach( button => {
-
-      if(button.innerHTML == state.leftActiveButton) {
-
-        button.classList.add("current-currencie")
-
-        // Да , мы нашли такую кнопку
-        isFindActiveButtonInRightSide = true
+        }
 
       }
-
-    })
-
-
-    if(!isFindActiveButtonInRightSide) {
-
-      if(selectOnRightSide.value = state.leftActiveButton) {
-
-        selectOnRightSide.classList.add("current-currencie")
-
-        selectOnRightSide.style.backgroundColor = "#833ae0"
-  
-      }
-    }
-
-
-    // -- // В ПРАВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  leftActiveButton
-
-    // -------------------------------------//      Теперь ЗАДАЁМ   эти классы  на кнопки   (и селекты)   РЕВЕРСИВНО  
+      // В ЛЕВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  rightActiveButton
 
 
 
@@ -1229,20 +1194,79 @@
 
 
 
+
+
+
+
+      // В ПРАВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  leftActiveButton
+
+      // Переменная-флаг.  "Есть ли среди ЛЕВЫХ кнопок та, которая равна  leftActiveButton?"
+      let isFindActiveButtonInRightSide = false
+
+      buttonsOnRightSide.forEach( button => {
+
+        if(button.innerHTML == state.leftActiveButton) {
+
+          button.classList.add("current-currencie")
+
+          // Да , мы нашли такую кнопку
+          isFindActiveButtonInRightSide = true
+
+        }
+
+      })
+
+
+      if(!isFindActiveButtonInRightSide) {
+
+        if(selectOnRightSide.value = state.leftActiveButton) {
+
+          selectOnRightSide.classList.add("current-currencie")
+
+          selectOnRightSide.style.backgroundColor = "#833ae0"
     
-
-    // Меняем местами значения leftActiveButton и rightActiveButton в объекте state
-    let saveValueFromStateLeftActiveButton = state.leftActiveButton
-
-
-    let saveValueFromStateRightActiveButton = state.rightActiveButton
+        }
+      }
 
 
-    state.leftActiveButton = saveValueFromStateRightActiveButton
+      // -- // В ПРАВОЙ  ПОЛОВИНЕ ищем кнопку или селект, значение которого соответствовало бы  leftActiveButton
 
-    state.rightActiveButton = saveValueFromStateLeftActiveButton
+      // -------------------------------------//      Теперь ЗАДАЁМ   эти классы  на кнопки   (и селекты)   РЕВЕРСИВНО  
 
 
-    // Запускаем функцию - фетч-запрос к API  (затем автоматически выполнится подсчёт и рендер значений)
-    functionAsync()
+
+
+
+
+
+      
+
+      // Меняем местами значения leftActiveButton и rightActiveButton в объекте state
+      let saveValueFromStateLeftActiveButton = state.leftActiveButton
+
+
+      let saveValueFromStateRightActiveButton = state.rightActiveButton
+
+
+      state.leftActiveButton = saveValueFromStateRightActiveButton
+
+      state.rightActiveButton = saveValueFromStateLeftActiveButton
+
+
+      // Запускаем функцию - фетч-запрос к API  (затем автоматически выполнится подсчёт и рендер значений)
+      functionAsync()
+
+    }
+    //  --- // Если интернет-соединение присутствует, выполняем тело функции - 
+
+
+    //  Если интернета нет, выкидываем на экран  алерт с ошибкой  
+    else {
+      swal("Нет устойчивого интернет-соединения", "Что-то мне поплохело.. х_х", "error");
+    }
+
+
+
+
   }
+  // Конец описания функции 
