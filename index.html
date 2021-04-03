@@ -53,14 +53,14 @@
             <h3 class="form__left-column-heading">У меня есть</h3>
 
             <!-- Ряд для кнопок и селекта  -->
-            <div class="currencies-row">
+            <div id="currencies-row-left" class="currencies-row">
               <!-- У первой кнопки уже есть АКТИВНЫЙ КЛАСС   current-currencie  -->
               <button class="child currencies-row-button current-currencie" type="button">RUB</button>
               <button class="child currencies-row-button" type="button">USD</button>
               <button class="child currencies-row-button" type="button">EUR</button>
               <button class="child currencies-row-button" type="button">GBP</button>
 
-              <select  name="base-currencies" id="left-select" style="color:  #C6C6C6; font-weight: normal;">
+              <select   name="base-currencies" id="left-select" style="color:  #C6C6C6; font-weight: normal;">
 
                 <option value="BYR" selected disabled hidden>BYR</option>
                 
@@ -128,9 +128,9 @@
 
             <!-- Блок с инпутом для ввода чисел  и  строкой с курсом валют -->
             <div class="wrapper-for-input-and-rate">
-              <input id="left-input" value="1" type="number">
+              <input id="left-input" value="1" type="text">
 
-              <p>1 RUB = Х.ХХХХ USD</p>
+              <p id="rate1">1 RUB = Х.ХХХХ USD</p>
             </div>
 
           </div>
@@ -140,14 +140,14 @@
 
 
           <!-- Стрелки , отвечающие за смену БАЗОВОЙ и ЖЕЛАЕМОЙ валют -->
-          <!-- <div class="arrows">
+          <div class="arrows" id="arrows">
             <svg width="41" height="34" viewBox="0 0 41 34" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M31.5229 15.2253L38.6356 8.11266L31.5229 1" stroke="black" stroke-width="2"/>
               <path d="M38.8461 8.17848L2.23682 8.17848" stroke="black" stroke-width="2"/>
               <path d="M9.32324 18.548L2.21058 25.6607L9.32324 32.7733" stroke="black" stroke-width="2"/>
               <path d="M2.00008 25.5949L38.6094 25.5949" stroke="black" stroke-width="2"/>
               </svg>
-          </div> -->
+          </div>
 
 
 
@@ -158,7 +158,7 @@
             <h3 class="form__right-column-heading">Хочу приобрести</h3>
 
             <!-- Ряд для кнопок и селекта  -->
-            <div class="currencies-row">
+            <div class="currencies-row" id="currencies-row-right">
               <!-- У первой кнопки уже есть АКТИВНЫЙ КЛАСС   current-currencie  -->
               <button class="child currencies-row-button" type="button">RUB</button>
               <button class="child currencies-row-button current-currencie" type="button">USD</button>
@@ -233,9 +233,9 @@
 
             <!-- Блок с инпутом для ввода чисел  и  строкой с курсом валют -->
             <div class="wrapper-for-input-and-rate">
-              <input id="right-input" type="number">
+              <input id="right-input" type="text">
 
-              <p>1 USD = ХХ.ХХХХ RUB</p>
+              <p id="rate2">1 USD = ХХ.ХХХХ RUB</p>
             </div>
 
           </div>
