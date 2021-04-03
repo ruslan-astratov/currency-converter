@@ -114,8 +114,11 @@
   // Стоимость наших денег в ЖЕЛАЕМОЙ  валюте  (например, 67.6685) 
   function calcDesireMoneyFromFetchData() {
 
+    // // Получаем значение из ЛЕВОГО  инпута и преобразуем его в число.  При загрузке страницы у нас здесь 1
+    // let leftInputValue = form.querySelector("#left-input").value
+
     // Получаем значение из ЛЕВОГО  инпута и преобразуем его в число.  При загрузке страницы у нас здесь 1
-    let leftInputValue = form.querySelector("#left-input").value
+    let leftInputValue =  state.valueFromLeftInput == null   ?   form.querySelector("#left-input").value : state.valueFromLeftInput
 
     // console.log(leftInputValue)
 
