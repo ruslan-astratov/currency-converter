@@ -114,6 +114,9 @@ li {
 .form {
   display: flex;
   justify-content: space-between;
+  position: relative;
+
+  width: 641px;
 }
 
 /* Левая колонка */
@@ -122,7 +125,8 @@ li {
 }
 
 /* Заголовок в левой колонке */
-.form__left-column-heading {
+.form__left-column-heading,
+.form__right-column-heading {
   font-size: 12px;
   line-height: 14px;
   font-weight: normal;
@@ -193,7 +197,7 @@ li {
 }
 
 select,
-select:focus,
+/* select:focus, */
 select:active,
 option,
 option:focus,
@@ -217,12 +221,10 @@ select:hover {
 select:focus {
   color: white;
 
-  background-color: #833ae0;
+  background-color: #833ae0  !important;
 }
 
-/* select:blur {
-  background-color: white;
-} */
+
 
 /*  */
 
@@ -272,8 +274,8 @@ select:focus {
 /* Стрелки , отвечающие за смену БАЗОВОЙ и ЖЕЛАЕМОЙ валют */
 .arrows {
   position: absolute;
-  left: 554px;
-  top: 284px;
+  left: 301px;
+  top: 107px;
 
   cursor: pointer;
 }
