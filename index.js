@@ -11,6 +11,9 @@
     rate: null,                  // 0.0135    Курс .  Приходит с API 
     valueDesiredCurrency: null,  // Стоимость денег желаемой валюты.   Например,      В     1 рубле      0.0131101944     USD 
 
+    valueFromLeftInput: null,    // Оригинальное, неизменённое значение из ЛЕВОГО инпута.  Записываем его сюда в момент БЛЮРА у левого инпута
+    valueFromRightInput: null,   // Оригинальное, неизменённое значение из ПРАВОГО инпута.  Записываем его сюда в момент БЛЮРА у правого инпута
+
 
 
     selectInFocus: false,
@@ -1066,21 +1069,19 @@
   }
 
 
-  // Повесим обработчик на  ЛЕВЫЙ  инпут 
+  // Получим  ЛЕВЫЙ  инпут 
   const leftInput = form.querySelector("#left-input")
 
-  // leftInput.addEventListener("input", calculatedMoneyAfterInputsChange)
-
+  // Повесим обработчик на  ЛЕВЫЙ  инпут 
   leftInput.addEventListener("input", calculatedMoneyAfterInputsChange)
 
 
 
 
-  // Повесим обработчик на  ПРАВЫЙ  инпут 
+  // Получим   ПРАВЫЙ  инпут 
   const rightInput = form.querySelector("#right-input")
 
-  // leftInput.addEventListener("input", calculatedMoneyAfterInputsChange)
-
+  // Повесим обработчик на  ПРАВЫЙ  инпут 
   rightInput.addEventListener("input", calculatedMoneyAfterInputsChange)
 
   //  ------------------------------------------- // Функция, которую повешу на оба инпута (на левый и на правый)
@@ -1307,4 +1308,190 @@
 
 
   }
-  // Конец описания функции 
+  // -------------------------------------------//  ФУНКЦИЯ   СРАБАТЫВАЮЩАЯ    ПРИ КЛИКЕ    НА СТРЕЛКИ-ПЕРЕКЛЮЧАТЕЛИ  -------------------------------------------
+
+
+
+
+
+
+
+
+
+  // --------------------------  Функция , которая ПРИ событии БЛЮР берёт ЗНАЧЕНИЕ из инпута и   РАЗБИВАЕТ  его по три цифры. После чего вставляет обратно -----------------------------------
+  
+  // valueFromLeftInput: null,    // Значение из ЛЕВОГО инпута.  Записываем его сюда в момент БЛЮРА у левого инпута
+  // valueFromRightInput: null,   // Значение из ПРАВОГО инпута.  Записываем его сюда в момент БЛЮРА у правого инпута
+
+  
+  leftInput.addEventListener("blur", splitInputValueIntoThreeDigits)
+
+  rightInput.addEventListener("blur", splitInputValueIntoThreeDigits)
+
+
+
+
+
+  // Функция, которая берёт значение из инпута и  разбивает его по три цифры
+  function splitInputValueIntoThreeDigits(event) {
+
+    // Оригинальное значение из инпута  в  виде строки     "5000.000"
+    let originalInputValueAsString = event.target.value
+
+
+    //   СОХРАНЯЕМ  это значение в  свойство   объекта state     valueFromLeftInput  или valueFromRightInput
+
+    // Если событие сработало на левом инпуте, то 
+    if(event.target.id == "left-input") {
+      state.valueFromLeftInput = originalInputValueAsString
+    }
+    // Если событие сработало на правом  инпуте, то 
+    else if(event.target.id == "right-input") {
+      state.valueFromRightInput = originalInputValueAsString
+    }
+
+
+
+
+    // Разбиваем строку на массив отдельных символов ["5", "0"...]
+    let originalInputValueAsArray = originalInputValueAsString.split("")
+
+
+
+
+
+    // Мы должны проверить - есть ли в значении ТОЧКА.   Если она есть, мы должны отсеять левую часть значения (всё, что было до точки  (5000)  
+    // Перебираем массив и ищем точку
+
+    let findDott = originalInputValueAsArray.find( symb => symb == "." )
+
+    console.log(findDott)
+
+    // // Если мы НАШЛИ точку 
+    if(findDott != undefined) {
+      // alert("Нашли точку!")
+
+      // Должны разделить массив символов на две половины - то, что ДО точки, и то, что ПОСЛЕ...
+
+      // Массив для символов ДО точки
+      let arrayWithSymbBeforeDott = []
+
+      // // Массив для символов ПОСЛЕ точки
+      let arrayWithSymbAfterDott = []
+
+
+      // Должны проверить - где именно стоит точка. Может, она вообще стоит в конце , и после неё нет никаких значений      5000.
+      
+      // Если точка стоит в конце   5000.
+      if(originalInputValueAsArray[originalInputValueAsArray.length - 1] == ".") {
+
+        // Точка 
+        let dott = originalInputValueAsArray.pop()
+
+        // Остальные цифры 
+        let rez = originalInputValueAsArray.join("")
+
+        // 5000  превратили в 5 000
+        let outrez = (rez+'').replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+
+        // Объединяем строку 5 000  и точку 
+        let resultStr = `${outrez}${dott}`
+
+        // Теперь мы должны вставить эти значения в инпут
+        event.target.value = resultStr
+
+
+      }
+
+      // Если точка стоит где-то посередине.   Нужно разделить значения на два массива и работать с левой половиной (то есть с теми значениями, что стоят ДО ТОЧКИ)
+      else {
+
+        // Индекс точки
+        let indexWhereDott = originalInputValueAsArray.findIndex( symb => symb == "." )
+
+        // Сама точка 
+        let dot = originalInputValueAsArray.find( symb => symb == "." )
+
+
+
+
+        // Массив символов , которые находятся СЛЕВА от точки
+        let copyLeftHalf = originalInputValueAsArray.slice(0, indexWhereDott)
+
+        console.log("Массив тех символов , которые находятся слева от точки", copyLeftHalf)
+
+
+        // Массив символов , которые находятся СПРАВА  от точки
+        let copyRightHalf = originalInputValueAsArray.slice(indexWhereDott+1)
+
+        console.log("Массив тех символов , которые находятся СПРАВА от точки", copyRightHalf)
+
+        // Преобразуем символы, стоящие СПРАВА,  из МАССИВА в СТРОКУ 
+        copyRightHalf = copyRightHalf.join("")
+
+
+
+        // Теперь ЛЕВУЮ часть преобразуем
+        let rez = copyLeftHalf.join("")
+
+        // 5000  превратили в 5 000
+        let outrez = (rez+'').replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+
+
+        // Слепим новую строку 
+        let resultS = `${outrez}${dot}${copyRightHalf}`
+
+        // Теперь мы должны вставить эти значения в инпут
+        event.target.value = resultS
+
+      }
+
+
+    } 
+
+    // если же НЕ НАШЛИ ТОЧКУ, это значит, что у нас целое значение    (5000)
+    else {
+
+      let rez = originalInputValueAsArray.join("")
+
+      // 5000  превратили в 5 000
+      let outrez = (rez+'').replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+
+      console.log("Результат деления по три цифры", outrez)
+
+
+
+      // Теперь мы должны вставить эти значения в инпут
+      event.target.value = outrez
+
+    }
+
+
+  }
+  // --------------------------  Функция , которая ПРИ событии БЛЮР берёт ЗНАЧЕНИЕ из инпута и   РАЗБИВАЕТ  его по три цифры. После чего вставляет обратно -----------------------------------
+
+
+
+
+  // ------------------------------------- Функция, которая ПРИ ФОКУСЕ на инпуте ВОЗВРАЩАЕТ ему ПРЕЖНЕЕ значение
+
+  // Повесим эту функцию на  ЛЕВЫЙ и ПРАВЫЙ инпуты
+  leftInput.addEventListener("focus", returnInputPreviosValue)
+
+  rightInput.addEventListener("focus", returnInputPreviosValue)
+
+
+  function returnInputPreviosValue(event) {
+
+    // Проверяем - в каком именно инпуте мы находимся (у какого инпута  произошло событие)
+    if(event.target.id == "left-input" && state.valueFromLeftInput != null) {
+      event.target.value = state.valueFromLeftInput
+    }
+
+    else if(event.target.id == "right-input" && state.valueFromRightInput != null) {
+      event.target.value = state.valueFromRightInput
+    }
+
+
+  }
+  // ------------------------------------//  Функция, которая ПРИ ФОКУСЕ на инпуте ВОЗВРАЩАЕТ ему ПРЕЖНЕЕ значение
