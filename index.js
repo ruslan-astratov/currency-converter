@@ -63,6 +63,21 @@
         }
 
       }, 500)
+
+
+
+      // Запускаем таймер setTimeout на 2 секунды.  Если по прошествии 2 секунд у нас  НЕ   будет соединения с интернетом , то закрываем модалку и выкидываем ошибку
+      setTimeout(function() {
+
+        if(!navigator.onLine) {
+
+          modal.style.display = "none";
+
+          swal("Не могу получить данные с сервера. Нет устойчивого интернет-соединения", "Проверьте Ваше интернет-соединение и перезагрузите страницу", "error");
+
+        }
+
+      }, 2000)
       
 
 
@@ -110,23 +125,18 @@
 
 
 
-  // Функция, которая собирает данные из ИНПУТОВ  и  РАССЧИТЫВАЕТ :
+  // Функция, которая собирает данные из ЛЕВОГО  ИНПУТА  и  РАССЧИТЫВАЕТ   значение для правого инпута:
   // Стоимость наших денег в ЖЕЛАЕМОЙ  валюте  (например, 67.6685) 
   function calcDesireMoneyFromFetchData() {
 
-    // // Получаем значение из ЛЕВОГО  инпута и преобразуем его в число.  При загрузке страницы у нас здесь 1
-    // let leftInputValue = form.querySelector("#left-input").value
-
     // Получаем значение из ЛЕВОГО  инпута и преобразуем его в число.  При загрузке страницы у нас здесь 1
     let leftInputValue =  state.valueFromLeftInput == null   ?   form.querySelector("#left-input").value : state.valueFromLeftInput
-
-    // console.log(leftInputValue)
 
     // Рассчитываем стоимость денег в желаемой валюте.       Например, сколько USD в 2 рублях.   В     2 рублях      0,026   USD 
     state.valueDesiredCurrency = leftInputValue * state.rate
 
   }
-  // Функция должна срабатывать после отправки И успешного выполнения фетч-запроса.  То есть после выполнения функции sendFetch
+  // Функция должна срабатывать после отправки И успешного выполнения фетч-запроса.  То есть после выполнения функции sendFetch и получения КУРСА  валют
 
 
 
@@ -1308,8 +1318,6 @@
     }
 
 
-
-
   }
   // -------------------------------------------//  ФУНКЦИЯ   СРАБАТЫВАЮЩАЯ    ПРИ КЛИКЕ    НА СТРЕЛКИ-ПЕРЕКЛЮЧАТЕЛИ  -------------------------------------------
 
@@ -1321,180 +1329,53 @@
 
 
 
-  // --------------------------  Функция , которая ПРИ событии БЛЮР берёт ЗНАЧЕНИЕ из инпута и   РАЗБИВАЕТ  его по три цифры. После чего вставляет обратно -----------------------------------
-  
-  // valueFromLeftInput: null,    // Значение из ЛЕВОГО инпута.  Записываем его сюда в момент БЛЮРА у левого инпута
-  // valueFromRightInput: null,   // Значение из ПРАВОГО инпута.  Записываем его сюда в момент БЛЮРА у правого инпута
-
-  
-  leftInput.addEventListener("blur", splitInputValueIntoThreeDigits)
-
-  rightInput.addEventListener("blur", splitInputValueIntoThreeDigits)
+  // -----------------------------------------------  ПРОБЕЛ МЕЖДУ КАЖДЫМИ ТРЕМЯ ЦИФРАМИ В ИНПУТАХ  ---------------------------------------------------------------------
 
 
 
-
-
-  // Функция, которая берёт значение из инпута и  разбивает его по три цифры
-  function splitInputValueIntoThreeDigits(event) {
-
-    // Оригинальное значение из инпута  в  виде строки     "5000.000"
-    let originalInputValueAsString = event.target.value
-
-
-    //   СОХРАНЯЕМ  это значение в  свойство   объекта state     valueFromLeftInput  или valueFromRightInput
-
-    // Если событие сработало на левом инпуте, то 
-    if(event.target.id == "left-input") {
-      state.valueFromLeftInput = originalInputValueAsString
-    }
-    // Если событие сработало на правом  инпуте, то 
-    else if(event.target.id == "right-input") {
-      state.valueFromRightInput = originalInputValueAsString
-    }
-
-
-
-
-    // Разбиваем строку на массив отдельных символов ["5", "0"...]
-    let originalInputValueAsArray = originalInputValueAsString.split("")
-
-
-
-
-
-    // Мы должны проверить - есть ли в значении ТОЧКА.   Если она есть, мы должны отсеять левую часть значения (всё, что было до точки  (5000)  
-    // Перебираем массив и ищем точку
-
-    let findDott = originalInputValueAsArray.find( symb => symb == "." )
-
-    console.log(findDott)
-
-    // // Если мы НАШЛИ точку 
-    if(findDott != undefined) {
-      // alert("Нашли точку!")
-
-      // Должны разделить массив символов на две половины - то, что ДО точки, и то, что ПОСЛЕ...
-
-      // Массив для символов ДО точки
-      let arrayWithSymbBeforeDott = []
-
-      // // Массив для символов ПОСЛЕ точки
-      let arrayWithSymbAfterDott = []
-
-
-      // Должны проверить - где именно стоит точка. Может, она вообще стоит в конце , и после неё нет никаких значений      5000.
-      
-      // Если точка стоит в конце   5000.
-      if(originalInputValueAsArray[originalInputValueAsArray.length - 1] == ".") {
-
-        // Точка 
-        let dott = originalInputValueAsArray.pop()
-
-        // Остальные цифры 
-        let rez = originalInputValueAsArray.join("")
-
-        // 5000  превратили в 5 000
-        let outrez = (rez+'').replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
-
-        // Объединяем строку 5 000  и точку 
-        let resultStr = `${outrez}${dott}`
-
-        // Теперь мы должны вставить эти значения в инпут
-        event.target.value = resultStr
-
-
+  // Функция, которая берёт значение из ИНПУТА (например, 5000)   и возвращает новое значение , с пробелами через каждые 3 символа  -->     5 000
+  function spacesEveryThreeSymbols(n) {
+      let result = "", d = 0;
+      while (n > 0) {
+          result = (++d % 3 == 0 && n > 9 ? " " : "") + n % 10 + result;
+          n = Math.trunc(n / 10);
       }
 
-      // Если точка стоит где-то посередине.   Нужно разделить значения на два массива и работать с левой половиной (то есть с теми значениями, что стоят ДО ТОЧКИ)
-      else {
-
-        // Индекс точки
-        let indexWhereDott = originalInputValueAsArray.findIndex( symb => symb == "." )
-
-        // Сама точка 
-        let dot = originalInputValueAsArray.find( symb => symb == "." )
+      return result;
+  }
+  // Функция возвращает СТРОКУ.   Приняла 5000,   вернула    5 000
 
 
 
 
-        // Массив символов , которые находятся СЛЕВА от точки
-        let copyLeftHalf = originalInputValueAsArray.slice(0, indexWhereDott)
+  // Функция, которая УДАЛЯЕТ из строки все пробелы.  Возвращает СТРОКУ  , которую мы сможем затем вставить в левый или правый ИНПУТ 
+  function deleteAllSpacesInValue(str) {
 
-        console.log("Массив тех символов , которые находятся слева от точки", copyLeftHalf)
+    // Где  str = "1 234 567.89"
 
+    newStr = str.replace(/\s/g, '');
 
-        // Массив символов , которые находятся СПРАВА  от точки
-        let copyRightHalf = originalInputValueAsArray.slice(indexWhereDott+1)
+    return newStr
 
-        console.log("Массив тех символов , которые находятся СПРАВА от точки", copyRightHalf)
+    // Вернёт 1234567.89
 
-        // Преобразуем символы, стоящие СПРАВА,  из МАССИВА в СТРОКУ 
-        copyRightHalf = copyRightHalf.join("")
-
-
-
-        // Теперь ЛЕВУЮ часть преобразуем
-        let rez = copyLeftHalf.join("")
-
-        // 5000  превратили в 5 000
-        let outrez = (rez+'').replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
-
-
-        // Слепим новую строку 
-        let resultS = `${outrez}${dot}${copyRightHalf}`
-
-        // Теперь мы должны вставить эти значения в инпут
-        event.target.value = resultS
-
-      }
-
-
-    } 
-
-    // если же НЕ НАШЛИ ТОЧКУ, это значит, что у нас целое значение    (5000)
-    else {
-
-      let rez = originalInputValueAsArray.join("")
-
-      // 5000  превратили в 5 000
-      let outrez = (rez+'').replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
-
-      console.log("Результат деления по три цифры", outrez)
+  }
 
 
 
-      // Теперь мы должны вставить эти значения в инпут
-      event.target.value = outrez
+  // Функция, которая РЕНДЕРИТ, то есть рисует/вставляет в указанный инпут одно из значений (5000 или 5 000)
+  function renderValueInInput(  ) {
 
-    }
 
 
   }
-  // --------------------------  Функция , которая ПРИ событии БЛЮР берёт ЗНАЧЕНИЕ из инпута и   РАЗБИВАЕТ  его по три цифры. После чего вставляет обратно -----------------------------------
 
 
 
 
-  // ------------------------------------- Функция, которая ПРИ ФОКУСЕ на инпуте ВОЗВРАЩАЕТ ему ПРЕЖНЕЕ значение
-
-  // Повесим эту функцию на  ЛЕВЫЙ и ПРАВЫЙ инпуты
-  leftInput.addEventListener("focus", returnInputPreviosValue)
-
-  rightInput.addEventListener("focus", returnInputPreviosValue)
 
 
-  function returnInputPreviosValue(event) {
-
-    // Проверяем - в каком именно инпуте мы находимся (у какого инпута  произошло событие)
-    if(event.target.id == "left-input" && state.valueFromLeftInput != null) {
-      event.target.value = state.valueFromLeftInput
-    }
-
-    else if(event.target.id == "right-input" && state.valueFromRightInput != null) {
-      event.target.value = state.valueFromRightInput
-    }
+  // ----------------------------------------------- //  ПРОБЕЛ МЕЖДУ КАЖДЫМИ ТРЕМЯ ЦИФРАМИ В ИНПУТАХ  ---------------------------------------------------------------------
 
 
-  }
-  // ------------------------------------//  Функция, которая ПРИ ФОКУСЕ на инпуте ВОЗВРАЩАЕТ ему ПРЕЖНЕЕ значение
+
